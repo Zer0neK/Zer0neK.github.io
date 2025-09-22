@@ -1,199 +1,576 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>剑客 Roblox 脚本中心</title>
-<style>
-/* Reset */
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background:#0d0d1a; color:#f0f0f0; line-height:1.6; }
-a { color:#00ffff; text-decoration:none; }
-a:hover { text-decoration:underline; }
-
-/* 顶部导航 */
-nav { background:#1f1f3d; padding:10px 20px; display:flex; justify-content:center; flex-wrap:wrap; }
-nav a { margin:5px 15px; color:#00ffff; font-weight:bold; }
-nav a:hover { color:#ffcc00; }
-
-/* Header */
-header { text-align:center; padding:40px 20px; background:linear-gradient(90deg,#1f1f2e,#2e2e4a); }
-header img { height:150px; }
-header h1 { margin-top:20px; font-size:2.5rem; color:#00ffff; }
-
-/* Main */
-main { max-width:1200px; margin:40px auto; padding:0 20px; }
-
-/* Section */
-section { margin-bottom:60px; }
-h2 { color:#ffcc00; margin-bottom:20px; border-bottom:2px solid #444; padding-bottom:5px; }
-
-/* 表格 */
-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
-table, th, td { border:1px solid #444; }
-th, td { padding:10px; text-align:center; }
-th { background-color:#22223b; }
-td { background-color:#1f1f3d; }
-
-/* 脚本区域 */
-.script { background-color:#1a1a2e; border-radius:8px; padding:15px; margin-bottom:20px; position:relative; }
-.script h3 { margin-bottom:10px; color:#00ffcc; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
-pre { background-color:#0f0f25; padding:15px; border-radius:8px; overflow-x:auto; color:#00ffcc; display:none; white-space:pre-wrap; word-break:break-word; }
-
-/* 复制按钮 */
-button.copy-btn {
-    background-color:#00ffff; border:none; padding:5px 12px; border-radius:5px;
-    cursor:pointer; font-weight:bold; color:#000;
-}
-button.copy-btn:hover { background-color:#00cccc; }
-
-/* Badge */
-.badge { display:inline-block; padding:5px 10px; border-radius:5px; color:#fff; font-weight:bold; margin:3px; }
-.free { background-color:#3498db; } .vip { background-color:#00c851; }
-.center { text-align:center; }
-
-/* Footer */
-footer { text-align:center; padding:20px; background:#1f1f3d; color:#888; }
-
-/* 折叠箭头 */
-h3 span { margin-left:10px; transition: transform 0.3s; }
-h3.active span { transform: rotate(90deg); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>剑客 - Roblox游戏脚本分享</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b0000;
+            --secondary: #d4af37;
+            --dark: #1a1a1a;
+            --light: #f5f5f5;
+            --accent: #4a0000;
+            --gold: #ffd700;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #2c2c2c 0%, #1a1a1a 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><path fill="%23444" d="M0 0L100 100M100 0L0 100" stroke-width="0.5"/></svg>');
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--secondary);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        
+        .logo i {
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* 英雄区域样式 */
+        .hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><path fill="%238b000022" d="M100,0 C155.228,0 200,44.772 200,100 C200,155.228 155.228,200 100,200 C44.772,200 0,155.228 0,100 C0,44.772 44.772,0 100,0 Z" /></svg>') no-repeat center center;
+            background-size: contain;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 游戏卡片样式 */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+        
+        .game-card {
+            background: linear-gradient(to bottom, rgba(43, 43, 43, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--secondary);
+        }
+        
+        .game-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .game-card:hover .game-image img {
+            transform: scale(1.05);
+        }
+        
+        .game-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 1rem;
+            color: var(--light);
+            font-size: 1.4rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        
+        .game-content {
+            padding: 1.5rem;
+        }
+        
+        .game-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            color: #ccc;
+        }
+        
+        .script-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        
+        .script-content {
+            font-family: 'Courier New', monospace;
+            color: var(--light);
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        .copy-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(to bottom, #a00, #600);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+        
+        .copy-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background: rgba(26, 26, 26, 0.9);
+            padding: 3rem 0;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 3rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 剑客主题元素 */
+        .sword-divider {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            color: var(--secondary);
+        }
+        
+        .sword-divider::before,
+        .sword-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--secondary), transparent);
+        }
+        
+        .sword-divider i {
+            margin: 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .game-card {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .game-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .game-card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+    </style>
 </head>
 <body>
+    <!-- 导航栏 -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-swords"></i>
+                <div>剑客脚本</div>
+            </div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">游戏脚本</a>
+                <a href="#">脚本教程</a>
+                <a href="#">关于我们</a>
+                <a href="#">联系</a>
+            </div>
+        </nav>
+    </header>
 
-<!-- 导航栏 -->
-<nav>
-    <a href="#team">团队</a>
-    <a href="#stats">统计</a>
-    <a href="#contact">联系</a>
-    <a href="#scripts">脚本</a>
-</nav>
+    <!-- 主要内容 -->
+    <main class="container">
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <h1>剑客脚本</h1>
+            <p>专业提供Roblox游戏脚本，提升您的游戏体验</p>
+        </section>
 
-<!-- Header -->
-<header>
-    <img src="https://raw.githubusercontent.com/Zer0neK/Sword_Guest/main/Logo.png" alt="Sword Guest Logo">
-    <h1>剑客 Roblox 脚本中心</h1>
-</header>
+        <div class="sword-divider">
+            <i class="fas fa-swords"></i>
+        </div>
 
-<main>
-<!-- 团队介绍 -->
-<section id="team">
-    <h2>🌟 剑客团队</h2>
-    <table>
-        <tr><th>职位</th><th>成员</th></tr>
-        <tr><td>👑 创始人</td><td>初夏</td></tr>
-        <tr><td>📝 脚本策划</td><td>qaz</td></tr>
-        <tr><td>🛠️ 技术总监</td><td>Qumu</td></tr>
-        <tr><td>✍️ 脚本作者</td><td>初夏、Qumu、宿傩、月星</td></tr>
-        <tr><td>💰 财务总监</td><td>切克撒</td></tr>
-        <tr><td>📊 财务团队</td><td>qaz、Zaza、久念</td></tr>
-        <tr><td>🧪 测试总监</td><td>qaz</td></tr>
-        <tr><td>🔍 测试团队</td><td>久念、Zaza、素质、小猫土豆、su</td></tr>
-        <tr><td>🔍 代理</td><td>qaz、Zaza、su</td></tr>
-        <tr><td>🎭 吉祥物</td><td>小猫土豆、kd</td></tr>
-    </table>
-</section>
+        <!-- 游戏网格 -->
+        <section class="games-grid">
+            <!-- 游戏卡片 1 -->
+            <div class="game-card">
+                <div class="game-image">
+                    <img src="https://tr.rbxcdn.com/6c864b29d9b3d2d71d487c0c5d0a1f6f/768/432/Image/Png" alt="Westbound">
+                    <div class="game-title">Westbound</div>
+                </div>
+                <div class="game-content">
+                    <p class="game-description">西部主题的冒险游戏，探索荒野，与其他玩家互动，完成任务。</p>
+                    <div class="script-box">
+                        <div class="script-content">
+                            loadstring(game:HttpGet("https://raw.githubusercontent.com/jiankescript/westbound/main/script.lua"))()
+                        </div>
+                    </div>
+                    <button class="copy-btn" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制脚本</button>
+                </div>
+            </div>
 
-<!-- 统计 -->
-<section id="stats">
-    <h2>📊 脚本统计</h2>
-    <div class="center">
-        <span class="badge free">免费版访问次数: 2,574,482+</span>
-        <span class="badge vip">付费版访问次数: 12,964+</span>
-    </div>
-</section>
+            <!-- 游戏卡片 2 -->
+            <div class="game-card">
+                <div class="game-image">
+                    <img src="https://tr.rbxcdn.com/0a7b741c7e7d0b2b5a2d284d3e76f6c6/768/432/Image/Png" alt="Ninja Legends">
+                    <div class="game-title">Ninja Legends</div>
+                </div>
+                <div class="game-content">
+                    <p class="game-description">成为一名忍者，训练你的技能，击败敌人，收集硬币购买更好的武器。</p>
+                    <div class="script-box">
+                        <div class="script-content">
+                            loadstring(game:HttpGet("https://raw.githubusercontent.com/jiankescript/ninja-legends/main/script.lua"))()
+                        </div>
+                    </div>
+                    <button class="copy-btn" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制脚本</button>
+                </div>
+            </div>
 
-<!-- 联系方式 -->
-<section id="contact">
-    <h2>📞 联系我们</h2>
-    <h3>QQ交流群</h3>
-    <div class="center">
-        <a class="badge" href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=VW40-EaizJr2-gxk5NRHTegmKzK4Wojj&noverify=0">一群 155160100</a>
-        <a class="badge" href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=ib-0K8cY5PoeV30KZAzUMm12ZrbP_bos&noverify=0">二群 868141480</a>
-        <a class="badge" href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=jkNqo2FsJ8Tqs5zO-GVF35EId4u93LcB&noverify=0">三群 1026483682</a>
-    </div>
+            <!-- 游戏卡片 3 -->
+            <div class="game-card">
+                <div class="game-image">
+                    <img src="https://tr.rbxcdn.com/8d51eed5c1d6d7d3d6f5b4e3c3d3e3f6/768/432/Image/Png" alt="Legends Of Speed">
+                    <div class="game-title">Legends Of Speed</div>
+                </div>
+                <div class="game-content">
+                    <p class="game-description">速度与传奇的世界，奔跑、跳跃、收集能量，成为最快的传奇。</p>
+                    <div class="script-box">
+                        <div class="script-content">
+                            loadstring(game:HttpGet("https://raw.githubusercontent.com/jiankescript/legends-of-speed/main/script.lua"))()
+                        </div>
+                    </div>
+                    <button class="copy-btn" onclick="copyScript(this)"><i class="fas fa-copy"></i> 复制脚本</button>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <h3>Discord社区</h3>
-    <div class="center">
-        <a class="badge" href="https://discord.gg/jNEW7g93nX">剑客官方Discord</a>
-        <a class="badge" href="https://discord.gg/SjtaQQBXDb">合作伙伴宿傩Discord</a>
-    </div>
-</section>
+    <!-- 页脚 -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>关于剑客</h3>
+                <p>剑客脚本专注于提供高质量的Roblox游戏脚本，帮助玩家提升游戏体验。</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>热门游戏</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Westbound</a></li>
+                    <li><a href="#">Ninja Legends</a></li>
+                    <li><a href="#">Legends Of Speed</a></li>
+                    <li><a href="#">Adopt Me!</a></li>
+                    <li><a href="#">Brookhaven RP</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>脚本分类</h3>
+                <ul class="footer-links">
+                    <li><a href="#">自动收集</a></li>
+                    <li><a href="#">速度提升</a></li>
+                    <li><a href="#">无敌模式</a></li>
+                    <li><a href="#">传送功能</a></li>
+                    <li><a href="#">游戏货币</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>支持我们</h3>
+                <p>如果您觉得我们的脚本有用，请考虑捐赠支持我们继续开发。</p>
+                <button class="copy-btn" style="margin-top: 1rem;"><i class="fas fa-donate"></i> 捐赠支持</button>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 剑客脚本. 保留所有权利. | Roblox是Roblox Corporation的注册商标</p>
+        </div>
+    </footer>
 
-<!-- 脚本 -->
-<section id="scripts">
-    <h2>📝 脚本列表</h2>
-
-    <!-- 免费脚本 -->
-    <div class="script">
-        <h3 onclick="toggleScript(this)">🆓 免费版脚本 <span>▶</span></h3>
-        <button class="copy-btn" onclick="copyCode('freeScript')">复制</button>
-        <pre id="freeScript">
-loadstring(request({Url = "https://github.com/Zer0neK/Sword_Guest/releases/download/SG/FREE.lua"}).Body)()
-        </pre>
-    </div>
-
-    <!-- 付费脚本 -->
-    <div class="script">
-        <h3 onclick="toggleScript(this)">💎 付费版脚本 <span>▶</span></h3>
-        <button class="copy-btn" onclick="copyCode('vipScript')">复制</button>
-        <pre id="vipScript">
-getfenv().ADittoKey = "输入卡密"
-loadstring(request({Url = "https://github.com/Zer0neK/Sword_Guest/releases/download/SG/Loader.lua"}).Body)()
-        </pre>
-
-        <h3>价格表</h3>
-        <table>
-            <tr><th>套餐</th><th>时长</th><th>价格</th></tr>
-            <tr><td>🥈 标准卡</td><td>14 天</td><td>5 元</td></tr>
-            <tr><td>🥇 高级卡</td><td>30 天</td><td>10 元</td></tr>
-            <tr><td>🏆 永久卡</td><td>永久使用</td><td>100 元</td></tr>
-        </table>
-    </div>
-
-    <!-- 支持服务器 -->
-    <div class="script">
-        <h3 onclick="toggleScript(this)">⚡ 支持服务器列表 <span>▶</span></h3>
-        <pre id="servers">
-免费版支持:
-- 剑客脚本: 通用功能, 极速传奇, 忍者传奇
-
-付费版支持:
-- 剑客脚本: 一路向西
-- 宿傩脚本: 通用, ohio, Fisch, 被遗弃, 力量传奇, 犯罪, 种植花园, 刀刃球, 脑叶, ...
-- 月星脚本: 死铁轨, 黑暗欺骗(狩猎), 偷饼干, 钓它, 地牢英雄, 排球传奇, 超速射击, 战争大亨
-        </pre>
-    </div>
-</section>
-
-</main>
-
-<footer>
-    &copy; 2025 剑客团队. All Rights Reserved.
-</footer>
-
-<script>
-// 复制脚本
-function copyCode(id) {
-    const code = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(code).then(()=>alert("脚本已复制到剪贴板！"));
-}
-
-// 脚本折叠
-function toggleScript(el) {
-    const pre = el.nextElementSibling;
-    if(pre.tagName === 'PRE') {
-        if(pre.style.display === 'block') {
-            pre.style.display = 'none';
-            el.classList.remove('active');
-        } else {
-            pre.style.display = 'block';
-            el.classList.add('active');
+    <script>
+        // 复制脚本功能
+        function copyScript(button) {
+            const scriptContent = button.previousElementSibling.querySelector('.script-content').textContent;
+            navigator.clipboard.writeText(scriptContent).then(() => {
+                // 保存原始文本
+                const originalText = button.innerHTML;
+                
+                // 更新按钮文本和样式
+                button.innerHTML = '<i class="fas fa-check"></i> 已复制!';
+                button.style.background = 'linear-gradient(to bottom, #00a000, #006000)';
+                
+                // 2秒后恢复原始状态
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制脚本内容');
+            });
         }
-    }
-}
-</script>
-
+        
+        // 添加滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameCards = document.querySelectorAll('.game-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            gameCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transition = 'opacity 0.5s ease-in-out';
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
